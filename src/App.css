@@ -88,20 +88,17 @@ body {
 /* Main Wheel Wrapper - Generic/Mobile First */
 .wheel-wrapper {
   position: relative;
-  width: min(850px, 90vw);
-  height: min(850px, 90vw);
+  width: min(850px, 90vw, 90vh);
+  height: min(850px, 90vw, 90vh);
   max-width: 850px;
-  max-height: 850px;
   max-height: 850px;
   aspect-ratio: 1;
   /* Ensure arrow isn't clipped if it sticks out */
   overflow: visible;
 
   /* Geometry Constants */
-  /* Geometry Constants */
   /* Wheel has FIXED 20px padding in JS. CSS must match EXACTLY to prevents zoom drift. */
   --wheel-padding: 20px;
-  /* Pointer tip is at 90% of its width */
   /* Pointer tip is at 90% of its width */
   --pointer-tip-depth: 0.9;
 
@@ -168,17 +165,21 @@ body {
   /* Ensure arrow stays fixed - does NOT rotate with wheel */
   will-change: auto;
   
-  /* Fixed Size - same on all screens for consistent positioning */
-  width: 40px !important;
-  height: 40px !important;
+  /* Responsive Size - scales with screen size */
+  width: 40px;
+  height: 40px;
   
   /* Smooth transitions for color changes */
   transition: filter 0.2s ease;
 }
 
 /* Tablet Tweaks */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .wheel-wrapper {
+    width: min(600px, 85vw, 85vh);
+    height: min(600px, 85vw, 85vh);
+    max-width: 600px;
+    max-height: 600px;
     /* Tablet Pointer Size - Same as default for consistency */
     --pointer-size: 40px;
   }
@@ -1299,16 +1300,28 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .wheel-wrapper {
+    width: min(400px, 85vw, 85vh);
+    height: min(400px, 85vw, 85vh);
     max-width: 400px;
+    max-height: 400px;
   }
 
   .wheel-pointer {
-    /* Fixed position - same on all screens - arrow tip touches wheel edge */
-    right: 56px !important;
-    width: 40px !important;
-    height: 40px !important;
+    /* Fixed position at right side (3 o'clock) - arrow points right, extending outward */
+    top: 50% !important;
+    right: -8px !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+    width: 35px !important;
+    height: 35px !important;
+    /* Slightly smaller shadow on mobile for better performance */
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  }
+
+  .wheel-container {
+    padding: 15px;
   }
 
   .right-sidebar {
@@ -1335,22 +1348,30 @@ body {
   .header-btn span:not(.icon) {
     display: none;
   }
-
-  .wheel-container {
-    padding: 15px;
-  }
 }
 
 @media (max-width: 480px) {
   .wheel-wrapper {
+    width: min(300px, 90vw, 90vh);
+    height: min(300px, 90vw, 90vh);
     max-width: 300px;
+    max-height: 300px;
   }
 
   .wheel-pointer {
-    /* Fixed position - same on all screens - arrow tip touches wheel edge */
-    right: 56px !important;
-    width: 40px !important;
-    height: 40px !important;
+    /* Fixed position at right side (3 o'clock) - arrow points right, extending outward */
+    top: 50% !important;
+    right: -6px !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+    width: 30px !important;
+    height: 30px !important;
+    /* Smaller shadow on small mobile for better performance */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  }
+
+  .wheel-container {
+    padding: 10px;
   }
 
   .right-sidebar {
@@ -1500,10 +1521,43 @@ body {
 }
 
 .wheel-container-fullscreen .wheel-pointer {
-  /* Fixed position - same on all screens including fullscreen - arrow tip touches wheel edge */
-  right: 56px !important;
+  /* Fixed position at right side (3 o'clock) - arrow points right, extending outward */
+  top: 50% !important;
+  right: -10px !important;
+  left: auto !important;
+  transform: translateY(-50%) !important;
   width: 40px !important;
   height: 40px !important;
+}
+
+/* Fullscreen responsive adjustments */
+@media (max-width: 768px) {
+  .wheel-container-fullscreen {
+    padding: 20px;
+  }
+
+  .wheel-container-fullscreen .wheel-wrapper {
+    width: min(90vh, 90vw);
+    height: min(90vh, 90vw);
+  }
+
+  .wheel-container-fullscreen .wheel-pointer {
+    right: -8px !important;
+    width: 35px !important;
+    height: 35px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .wheel-container-fullscreen {
+    padding: 15px;
+  }
+
+  .wheel-container-fullscreen .wheel-pointer {
+    right: -6px !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
 }
 
 .wheel-container-fullscreen .wheel {
