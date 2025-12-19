@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Ensure entries is an array
-    const entries: any[] = Array.isArray(entriesResult) ? entriesResult : []
+    let entries: any[] = Array.isArray(entriesResult) ? entriesResult : []
 
     // Filter out removed entries
     const removedEntriesResult = await sql`
