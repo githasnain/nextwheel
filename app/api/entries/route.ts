@@ -9,18 +9,10 @@ export async function GET(request: NextRequest) {
     const fileId = searchParams.get('fileId')
     const search = searchParams.get('search')
 
-    let query = sql`
-      SELECT 
-        e.*,
-        f.filename as file_name,
-        f.active as file_active
-      FROM entries e
-      LEFT JOIN files f ON e.file_id = f.id
-      WHERE 1=1
-    `
-
+    let entries: any[]
+    
     if (fileId) {
-      query = sql`
+      entries = await sql`
         SELECT 
           e.*,
           f.filename as file_name,
@@ -29,15 +21,28 @@ export async function GET(request: NextRequest) {
         LEFT JOIN files f ON e.file_id = f.id
         WHERE e.file_id = ${fileId}
       `
+    } else {
+      entries = await sql`
+        SELECT 
+          e.*,
+          f.filename as file_name,
+          f.active as file_active
+        FROM entries e
+        LEFT JOIN files f ON e.file_id = f.id
+      `
+    }
+    
+    // Ensure entries is an array
+    if (!Array.isArray(entries)) {
+      entries = []
     }
 
-    let entries = await query
-
     // Filter out removed entries
-    const removedEntries = await sql`
+    const removedEntriesResult = await sql`
       SELECT name, ticket_number FROM removed_entries
     `
     
+    const removedEntries = Array.isArray(removedEntriesResult) ? removedEntriesResult : []
     const removedMap = new Map()
     removedEntries.forEach((r: any) => {
       const key = `${r.name?.toLowerCase()}_${r.ticket_number?.toLowerCase()}`

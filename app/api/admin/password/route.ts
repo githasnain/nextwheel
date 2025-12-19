@@ -22,9 +22,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Check against stored hash
-    const [result] = await sql`
+    const results = await sql`
       SELECT password_hash FROM admin_password WHERE id = 'admin'
     `
+
+    const result = Array.isArray(results) ? results[0] : null
 
     if (result) {
       const inputHash = btoa(password).substring(0, 10)
@@ -67,9 +69,11 @@ export async function PATCH(request: NextRequest) {
 
     // Verify old password
     if (oldPassword !== 'admin') {
-      const [result] = await sql`
+      const results = await sql`
         SELECT password_hash FROM admin_password WHERE id = 'admin'
       `
+      
+      const result = Array.isArray(results) ? results[0] : null
       
       if (!result) {
         return NextResponse.json(

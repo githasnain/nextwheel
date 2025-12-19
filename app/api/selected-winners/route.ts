@@ -6,10 +6,12 @@ export async function GET() {
   try {
     const sql = getNeonClient()
     
-    const selectedWinners = await sql`
+    const selectedWinnersResult = await sql`
       SELECT * FROM selected_winners
       ORDER BY spin_number ASC
     `
+
+    const selectedWinners = Array.isArray(selectedWinnersResult) ? selectedWinnersResult : []
 
     return NextResponse.json({ selectedWinners }, { status: 200 })
   } catch (error: any) {

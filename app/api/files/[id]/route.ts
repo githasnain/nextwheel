@@ -10,9 +10,11 @@ export async function GET(
     const sql = getNeonClient()
     const fileId = params.id
 
-    const [file] = await sql`
+    const files = await sql`
       SELECT * FROM files WHERE id = ${fileId}
     `
+
+    const file = Array.isArray(files) ? files[0] : null
 
     if (!file) {
       return NextResponse.json(

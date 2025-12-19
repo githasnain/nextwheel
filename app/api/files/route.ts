@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const sql = getNeonClient()
     
-    const files = await sql`
+    const filesResult = await sql`
       SELECT 
         id,
         filename,
@@ -18,6 +18,8 @@ export async function GET() {
       FROM files
       ORDER BY created_at DESC
     `
+
+    const files = Array.isArray(filesResult) ? filesResult : []
 
     return NextResponse.json({ files }, { status: 200 })
   } catch (error: any) {

@@ -6,10 +6,11 @@ export async function GET() {
   try {
     const sql = getNeonClient()
     
-    const settings = await sql`
+    const settingsResult = await sql`
       SELECT key, value FROM settings
     `
 
+    const settings = Array.isArray(settingsResult) ? settingsResult : []
     const settingsObj: Record<string, any> = {}
     settings.forEach((s: any) => {
       settingsObj[s.key] = s.value
