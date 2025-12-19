@@ -26,7 +26,10 @@ export async function POST(request: NextRequest) {
       SELECT password_hash FROM admin_password WHERE id = 'admin'
     `
 
-    const result = Array.isArray(results) && results.length > 0 ? results[0] as { password_hash: string } : null
+    let result: { password_hash: string } | null = null
+    if (Array.isArray(results) && results.length > 0) {
+      result = results[0] as { password_hash: string }
+    }
 
     if (result) {
       const inputHash = btoa(password).substring(0, 10)
@@ -73,7 +76,10 @@ export async function PATCH(request: NextRequest) {
         SELECT password_hash FROM admin_password WHERE id = 'admin'
       `
       
-      const result = Array.isArray(results) && results.length > 0 ? results[0] as { password_hash: string } : null
+      let result: { password_hash: string } | null = null
+      if (Array.isArray(results) && results.length > 0) {
+        result = results[0] as { password_hash: string }
+      }
       
       if (!result) {
         return NextResponse.json(
