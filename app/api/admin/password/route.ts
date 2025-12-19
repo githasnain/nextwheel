@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getNeonClient } from '@/lib/db'
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic'
+
 // POST - Check password
 export async function POST(request: NextRequest) {
   try {
