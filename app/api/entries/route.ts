@@ -9,10 +9,10 @@ export async function GET(request: NextRequest) {
     const fileId = searchParams.get('fileId')
     const search = searchParams.get('search')
 
-    let entries: any[]
+    let entriesResult: any
     
     if (fileId) {
-      entries = await sql`
+      entriesResult = await sql`
         SELECT 
           e.*,
           f.filename as file_name,
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         WHERE e.file_id = ${fileId}
       `
     } else {
-      entries = await sql`
+      entriesResult = await sql`
         SELECT 
           e.*,
           f.filename as file_name,
@@ -33,9 +33,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Ensure entries is an array
-    if (!Array.isArray(entries)) {
-      entries = []
-    }
+    const entries: any[] = Array.isArray(entriesResult) ? entriesResult : []
 
     // Filter out removed entries
     const removedEntriesResult = await sql`

@@ -24,9 +24,11 @@ export async function GET(
     }
 
     // Get entries for this file
-    const entries = await sql`
+    const entriesResult = await sql`
       SELECT * FROM entries WHERE file_id = ${fileId}
     `
+    
+    const entries = Array.isArray(entriesResult) ? entriesResult : []
 
     return NextResponse.json({
       ...file,
